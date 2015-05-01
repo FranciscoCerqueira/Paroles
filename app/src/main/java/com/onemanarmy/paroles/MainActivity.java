@@ -3,6 +3,7 @@ package com.onemanarmy.paroles;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -78,7 +79,7 @@ public class MainActivity extends Activity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    protected void onSaveInstanceState(@NonNull Bundle outState)
     {
         super.onSaveInstanceState(outState);
         outState.putLong(GameConstants.GAME_STARTTIME, startTime);
