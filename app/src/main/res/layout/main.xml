@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+	android:orientation="vertical">
+	
+	<LinearLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		
+		<TextView android:id="@+id/board_score"
+			style="@style/BoardLetters"
+			android:text="0"
+            android:gravity="center"/>
+
+        <Button android:id="@+id/board_tip"
+            style="@style/BoardLetters"
+            android:text="\! x3" />
+		
+		<Button android:id="@+id/board_swipe"
+            style="@style/BoardLetters"
+            android:text="-> x3" />
+
+        <TextView android:id="@+id/board_time"
+            style="@style/BoardLetters"
+            android:text="02:00"
+            android:gravity="center"/>
+		
+	</LinearLayout>
+
+   <LinearLayout android:layout_width="wrap_content"
+	   			 android:layout_height="wrap_content"
+				 android:orientation="horizontal"
+				 android:layout_gravity="top|center">
+				 
+	   <Button android:id="@+id/board_solution_letter1"
+			style="@style/BoardLetters"
+			android:text="\?" />
+					 
+	   <Button android:id="@+id/board_solution_letter2"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter3"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter4"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter5"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter6"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter7"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter8"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter9"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+	   <Button android:id="@+id/board_solution_letter10"
+		   style="@style/BoardLetters"
+		   android:text="\?" />
+	   
+   </LinearLayout>
+   
+   <LinearLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_gravity="bottom|center">
+
+		<Button android:id="@+id/board_button1"
+			style="@style/BoardButtons"
+			android:text="" />
+
+		<Button android:id="@+id/board_button2"
+			style="@style/BoardButtons"
+			android:text="" />
+
+		<Button android:id="@+id/board_button3"
+			style="@style/BoardButtons"
+			android:text="" />
+
+		<Button android:id="@+id/board_button4"
+			style="@style/BoardButtons"
+			android:text="" />
+
+		<Button android:id="@+id/board_button5"
+			style="@style/BoardButtons"
+			android:text="" />
+		
+		<Button android:id="@+id/board_button6"
+			style="@style/BoardButtons"
+			android:text="" />
+		
+		<Button android:id="@+id/board_button7"
+			style="@style/BoardButtons"
+			android:text="" />
+		
+		<Button android:id="@+id/board_button8"
+			style="@style/BoardButtons"
+			android:text="" />
+		
+		<Button android:id="@+id/board_button9"
+			style="@style/BoardButtons"
+			android:text="" />
+		
+		<Button android:id="@+id/board_button10"
+			style="@style/BoardButtons"
+			android:text="" />
+
+	</LinearLayout>
+
+</LinearLayout>
