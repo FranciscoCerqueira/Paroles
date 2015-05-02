@@ -515,7 +515,7 @@ public class MainActivity extends Activity
 		if (this.game.getSwipe())
 			SetUIForNextWord(false);
 		else
-			ShowMessage("You dont have more swipes available.");
+			ShowMessage(this.getString(R.string.no_swipes));
 	}
 
 	//------------------------------
