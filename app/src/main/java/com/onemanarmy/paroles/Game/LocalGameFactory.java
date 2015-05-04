@@ -27,7 +27,19 @@ public class LocalGameFactory implements IGameFactory
 		colors.add("ORANGE");
 		colors.add("MAGENTA");
 		
+		ArrayList<String> descs = new ArrayList<String>();
+		descs.add("A light color");
+		descs.add("A dark color");
+		descs.add("A color");
+		descs.add("Another color");
+		descs.add("A basic color");
+		descs.add("A color");
+		descs.add("It is a color");
+		descs.add("One Color");
+		descs.add("A color again");
+		
 		LocalGame game = new LocalGame(colors, 
+									   descs,
 		                               this.pcFactory.create());
 		return game;
 	}
@@ -44,6 +56,7 @@ public class LocalGameFactory implements IGameFactory
             result.setPoints(savedState.getInt(GameConstants.GAME_POINTS));
 			result.setTips(savedState.getInt(GameConstants.GAME_TIPS));
 			result.setSwipes(savedState.getInt(GameConstants.GAME_SWIPES));
+			result.setDescriptions(savedState.getInt(GameConstants.GAME_DESCS));
         }
 
         return result;

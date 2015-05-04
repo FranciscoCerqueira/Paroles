@@ -29,10 +29,13 @@ public class MainActivity extends Activity
 	private View.OnClickListener letterClick = null;
     private View.OnClickListener tipClick = null;
 	private View.OnClickListener swipeClick = null;
+	private View.OnClickListener descsClick = null;
 	private TextView txtScore = null;
     private TextView txtTime = null;
+	private TextView txtDesc = null;
 	private Button btnTips = null;
 	private Button btnSwipes = null;
+	private Button btnDescs = null;
 
     // Supporting game logic
 	private String currentWord = "";
@@ -87,6 +90,7 @@ public class MainActivity extends Activity
         outState.putString(GameConstants.GAME_WORDINCONSTRUCTION, GetWordInConstruction());
         outState.putBooleanArray(GameConstants.GAME_BUTTONSENABLED, GetEnabledButtons());
 		outState.putString(GameConstants.GAME_TIPPEDWORD, this.tippedWord);
+		outState.putString(GameConstants.GAME_CURRENTDESC, this.txtDesc.getText().toString());
         this.game.saveState(outState);
     }
 
@@ -226,8 +230,20 @@ public class MainActivity extends Activity
 			{
 				swipeToNextWord();
 			}
-
 		};
+		
+		descsClick = new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View p1)
+            {
+				if (txtDesc.getText().length() == 0)
+				{
+                	ShowDescription(game.getDescription());
+					ShowTotalDescriptions();
+				}
+            }
+        };
     }
 	
 	private void PrepareScreenElements()
@@ -256,12 +272,16 @@ public class MainActivity extends Activity
 		
 		txtScore = (TextView) this.findViewById(R.id.board_score);
         txtTime = (TextView) this.findViewById(R.id.board_time);
+		txtDesc = (TextView) this.findViewById(R.id.board_description);
 		
 		btnTips = (Button) this.findViewById(R.id.board_tip);
 		btnTips.setOnClickListener(tipClick);
 		
 		btnSwipes = (Button) this.findViewById(R.id.board_swipe);
 		btnSwipes.setOnClickListener(swipeClick);
+		
+		btnDescs = (Button) this.findViewById(R.id.board_descs);
+		btnDescs.setOnClickListener(descsClick);
 		
 	}
 	
@@ -305,6 +325,7 @@ public class MainActivity extends Activity
         {
             this.game = this.gameFactory.getNewGame(savedInstance);
             startTime = savedInstance.getLong(GameConstants.GAME_STARTTIME);
+			
         }
 
         // Put the current game elements on screen...
@@ -334,17 +355,20 @@ public class MainActivity extends Activity
         {
             this.shuffledWord = savedInstance.getString(GameConstants.GAME_SHUFFLEDWORD);
 			this.tippedWord = savedInstance.getString(GameConstants.GAME_TIPPEDWORD);
+			ShowDescription(savedInstance.getString(GameConstants.GAME_CURRENTDESC));
         }
         else
         {
 			PrepareForTips();
             ScrambleWord();
+			ShowDescription("");
         }
 
 		SetUIWithWord();
 		ResetSolution(checkSavedInstance);
 		ShowTips();
 		ShowSwipes();
+		ShowTotalDescriptions();
 	}
 	
 	private void SetUIWithWord()
@@ -463,7 +487,7 @@ public class MainActivity extends Activity
 	{
 		int tips = this.game.getTotalTips();
 		
-		btnTips.setText("! x" + tips);
+		btnTips.setText("? x" + tips);
 		btnTips.setEnabled(tips > 0);
 		
 		for(int i=0;i < this.currentWord.length(); i++)
@@ -516,6 +540,19 @@ public class MainActivity extends Activity
 			SetUIForNextWord(false);
 		else
 			ShowMessage(this.getString(R.string.no_swipes));
+	}
+	
+	private void ShowDescription(String desc)
+	{
+		txtDesc.setText(desc);
+	}
+	
+	public void ShowTotalDescriptions()
+	{
+		int descs = this.game.getTotalDescriptions();
+
+		btnDescs.setText("! x" + descs);
+		btnDescs.setEnabled(descs > 0);
 	}
 
 	//------------------------------

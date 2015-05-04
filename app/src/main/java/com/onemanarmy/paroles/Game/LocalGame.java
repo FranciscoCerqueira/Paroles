@@ -7,20 +7,25 @@ import java.util.ArrayList;
 public class LocalGame implements IGame
 {
 	ArrayList<String> words = null;
+	ArrayList<String> descs = null;
 	IPointsCalculator pointsCalculator = null;
 	String currentWord = null;
 	int counter = 0;
 	int points = 0;
     int tips = 0;
 	int swipes = 0;
+	int showDescs = 0;
 
 	public LocalGame(ArrayList<String> words,
+					 ArrayList<String> descs,
 	                 IPointsCalculator pc)
 	{
 		this.words = words;
+		this.descs = descs;
 		this.pointsCalculator = pc;
         this.tips = 30;
 		this.swipes = 3;
+		this.showDescs = 3;
 	}
 	
 	@Override
@@ -73,6 +78,7 @@ public class LocalGame implements IGame
         savedInstance.putInt(GameConstants.GAME_POINTS, this.points);
 		savedInstance.putInt(GameConstants.GAME_TIPS, this.tips);
 		savedInstance.putInt(GameConstants.GAME_SWIPES, this.swipes);
+		savedInstance.putInt(GameConstants.GAME_DESCS, this.showDescs);
     }
 
     @Override
@@ -87,7 +93,7 @@ public class LocalGame implements IGame
         if (this.tips > 0)
         {
             this.tips--;
-            return  true;
+            return true;
         }
         else
         {
@@ -113,7 +119,7 @@ public class LocalGame implements IGame
 		if (this.swipes > 0)
         {
             this.swipes--;
-            return  true;
+            return true;
         }
         else
         {
@@ -126,4 +132,34 @@ public class LocalGame implements IGame
 	{
 		return this.swipes;
 	}
+	
+	@Override
+	public String getDescription()
+	{
+		int currentDesc = counter - 1;
+		
+		if (this.showDescs > 0 &&
+			this.descs.size() > currentDesc)
+        {
+            this.showDescs--;
+            return this.descs.get(currentDesc);
+        }
+        else
+        {
+            return "";
+        }
+	}
+	
+	@Override
+	public void setDescriptions(int descs)
+	{
+		this.showDescs = descs;
+	}
+
+	@Override
+	public int getTotalDescriptions()
+	{
+		return this.showDescs;
+	}
+	
 }

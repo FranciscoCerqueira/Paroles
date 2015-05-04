@@ -17,4 +17,7 @@ public interface IGame
 	void setSwipes(int swipes);
 	boolean getSwipe();
 	int getTotalSwipes();
+	void setDescriptions(int descs);
+	String getDescription();
+	int getTotalDescriptions();
 }

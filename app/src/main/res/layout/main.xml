@@ -15,11 +15,15 @@
 
         <Button android:id="@+id/board_tip"
             style="@style/BoardLetters"
-            android:text="\! x3" />
+            android:text="\? x3" />
 		
 		<Button android:id="@+id/board_swipe"
             style="@style/BoardLetters"
             android:text="-> x3" />
+		
+		<Button android:id="@+id/board_descs"
+            style="@style/BoardLetters"
+            android:text="! x3" />
 
         <TextView android:id="@+id/board_time"
             style="@style/BoardLetters"
@@ -120,6 +124,20 @@
 			style="@style/BoardButtons"
 			android:text="" />
 
+	</LinearLayout>
+	
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_gravity="center"
+		android:gravity="center_horizontal">
+		
+		<TextView android:id="@+id/board_description"
+            style="@style/BoardLetters"
+			android:layout_width="wrap_content"
+            android:text=""
+			android:singleLine="true"/>
+		
 	</LinearLayout>
 
 </LinearLayout>
