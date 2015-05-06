@@ -40,10 +40,10 @@ public class LocalGame implements IGame
 	}
 
 	@Override
-	public void addWordPoints()
+	public void addWordPoints(int tips)
 	{
 		this.points += this.pointsCalculator
-		                   .GetTotal(this.currentWord);
+		                   .GetTotal(this.currentWord, tips);
 	}
 
 	@Override

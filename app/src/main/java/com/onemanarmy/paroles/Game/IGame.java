@@ -5,7 +5,7 @@ import android.os.Bundle;
 public interface IGame
 {
 	String nextWord();
-	void addWordPoints();
+	void addWordPoints(int tips);
 	int getPoints();
 	int getPointsByLetter(Character c);
     void setPoints(int points);

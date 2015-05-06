@@ -43,6 +43,7 @@ public class MainActivity extends Activity
 	private String tippedWord = "";
 	private IGame game = null;
 	private Random rand = null;
+	private int tipsInCurrentWord = 0;
 
     // Timer
     private Handler timer = null;
@@ -91,6 +92,7 @@ public class MainActivity extends Activity
         outState.putBooleanArray(GameConstants.GAME_BUTTONSENABLED, GetEnabledButtons());
 		outState.putString(GameConstants.GAME_TIPPEDWORD, this.tippedWord);
 		outState.putString(GameConstants.GAME_CURRENTDESC, this.txtDesc.getText().toString());
+		outState.putInt(GameConstants.GAME_TIPSINCURRENTWORD, this.tipsInCurrentWord);
         this.game.saveState(outState);
     }
 
@@ -216,6 +218,7 @@ public class MainActivity extends Activity
 						}
 					}
 					
+					tipsInCurrentWord++;
 					ResetSolution(false);
 					ShowTips();
 					CheckAnswer();
@@ -356,12 +359,14 @@ public class MainActivity extends Activity
             this.shuffledWord = savedInstance.getString(GameConstants.GAME_SHUFFLEDWORD);
 			this.tippedWord = savedInstance.getString(GameConstants.GAME_TIPPEDWORD);
 			ShowDescription(savedInstance.getString(GameConstants.GAME_CURRENTDESC));
+			this.tipsInCurrentWord = savedInstance.getInt(GameConstants.GAME_TIPSINCURRENTWORD);
         }
         else
         {
 			PrepareForTips();
             ScrambleWord();
 			ShowDescription("");
+			this.tipsInCurrentWord = 0;
         }
 
 		SetUIWithWord();
@@ -468,7 +473,7 @@ public class MainActivity extends Activity
 	
 	public void CalculatePoints()
 	{
-		this.game.addWordPoints();
+		this.game.addWordPoints(this.tipsInCurrentWord);
 		ShowPoints();
 	}
 

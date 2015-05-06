@@ -44,7 +44,7 @@ public class PointsCalculator implements IPointsCalculator
 	}
 
 	@Override
-	public int GetTotal(String word)
+	public int GetTotal(String word, int tips)
 	{
 		int total = 0;
 		for(Character c : word.toCharArray())

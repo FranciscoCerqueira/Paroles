@@ -5,7 +5,7 @@ public class PointsCalculatorFactory implements IPointsCalculatorFactory
 	@Override
 	public IPointsCalculator create()
 	{
-		return new PointsCalculator();
+		return new OneLetterOnePointCalculator();
 	}
 	
 }
