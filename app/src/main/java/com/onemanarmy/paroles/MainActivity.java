@@ -53,6 +53,7 @@ public class MainActivity extends Activity
 	
 	// Swipe
 	private float x1;
+	private float y1;
     private static final int MIN_DISTANCE = 150;
 	
 	// For properties use
@@ -110,17 +111,30 @@ public class MainActivity extends Activity
 		switch(event.getAction())
 		{
 			case MotionEvent.ACTION_DOWN:
-				x1 = event.getX();                         
+				x1 = event.getX();
+				y1 = event.getY();
 				break;         
 			case MotionEvent.ACTION_UP:
                 float x2 = event.getX();
+				float y2 = event.getY();
+
 				float deltaX = x2 - x1;
+				float deltaY = y2 - y1;
 
 				if (Math.abs(deltaX) > MIN_DISTANCE)
 				{
 					if (x2 < x1)
 					{
 						swipeToNextWord();
+					}
+				}
+
+				if (Math.abs(deltaY) > MIN_DISTANCE)
+				{
+					if (y1 < y2)
+					{
+						ResetSolution(false);
+						ShowTips();
 					}
 				}
 				                  
