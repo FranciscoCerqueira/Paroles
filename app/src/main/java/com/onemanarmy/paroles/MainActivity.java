@@ -1,24 +1,14 @@
 package com.onemanarmy.paroles;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.onemanarmy.paroles.Bootstrap.DIContainer;
-import com.onemanarmy.paroles.Game.GameConstants;
-import com.onemanarmy.paroles.Game.IGame;
-import com.onemanarmy.paroles.Game.IGameFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import android.app.*;
+import android.os.*;
+import android.support.annotation.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.onemanarmy.paroles.Bootstrap.*;
+import com.onemanarmy.paroles.Game.*;
+import java.util.*;
 
 public class MainActivity extends Activity 
 {
@@ -81,6 +71,12 @@ public class MainActivity extends Activity
 
         // Finally, start the game
 		StartGame();
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		
+		ShowMessage(Float.toString(metrics.widthPixels / metrics.density) + " x " + 
+					Float.toString(metrics.heightPixels / metrics.density));
     }
 
     @Override
