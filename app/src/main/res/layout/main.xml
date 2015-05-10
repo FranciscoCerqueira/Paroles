@@ -4,38 +4,41 @@
     android:gravity="center"
 	android:orientation="vertical">
 	
-	<LinearLayout android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal"
+		android:gravity="center"
+		android:layout_weight="1">
 		
 		<TextView android:id="@+id/board_score"
-			style="@style/BoardLetters"
+			style="@style/BoardExtras"
 			android:text="0"
             android:gravity="center"/>
 
         <Button android:id="@+id/board_tip"
-            style="@style/BoardLetters"
+            style="@style/BoardExtras"
             android:text="\? x3" />
 		
 		<Button android:id="@+id/board_swipe"
-            style="@style/BoardLetters"
+            style="@style/BoardExtras"
             android:text="-> x3" />
 		
 		<Button android:id="@+id/board_descs"
-            style="@style/BoardLetters"
+            style="@style/BoardExtras"
             android:text="! x3" />
 
         <TextView android:id="@+id/board_time"
-            style="@style/BoardLetters"
+            style="@style/BoardExtras"
             android:text="02:00"
             android:gravity="center"/>
 		
 	</LinearLayout>
 
-   <LinearLayout android:layout_width="wrap_content"
-	   			 android:layout_height="wrap_content"
+   <LinearLayout android:layout_width="fill_parent"
+	   			 android:layout_height="fill_parent"
 				 android:orientation="horizontal"
-				 android:layout_gravity="top|center">
+	   			 android:gravity="center"
+	   			 android:layout_weight="1">
 				 
 	   <Button android:id="@+id/board_solution_letter1"
 			style="@style/BoardLetters"
@@ -79,10 +82,11 @@
 	   
    </LinearLayout>
    
-   <LinearLayout android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+   <LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
 		android:orientation="horizontal"
-		android:layout_gravity="bottom|center">
+	   	android:gravity="center"
+	   	android:layout_weight="1">
 
 		<Button android:id="@+id/board_button1"
 			style="@style/BoardButtons"
@@ -127,15 +131,16 @@
 	</LinearLayout>
 	
 	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="fill_parent"
 		android:orientation="horizontal"
 		android:layout_gravity="center"
-		android:gravity="center_horizontal">
+		android:gravity="center_horizontal|bottom"
+		android:layout_weight="1">
 		
 		<TextView android:id="@+id/board_description"
             style="@style/BoardLetters"
 			android:layout_width="wrap_content"
-            android:text=""
+            android:text="abc"
 			android:singleLine="true"/>
 		
 	</LinearLayout>
