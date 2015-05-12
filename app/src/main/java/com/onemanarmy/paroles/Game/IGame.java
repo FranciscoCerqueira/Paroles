@@ -20,4 +20,6 @@ public interface IGame
 	void setDescriptions(int descs);
 	String getDescription();
 	int getTotalDescriptions();
+	void setWordsFound(String[] words);
+	void setPointsByWord(Integer[] points);
 }

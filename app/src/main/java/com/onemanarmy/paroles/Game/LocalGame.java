@@ -3,11 +3,15 @@ package com.onemanarmy.paroles.Game;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.*;
 
 public class LocalGame implements IGame
 {
-	ArrayList<String> words = null;
-	ArrayList<String> descs = null;
+
+	List<String> words = null;
+	List<String> descs = null;
+	List<String> wordsFound = null;
+	List<Integer> pointsByWord = null;
 	IPointsCalculator pointsCalculator = null;
 	String currentWord = null;
 	int counter = 0;
@@ -16,16 +20,18 @@ public class LocalGame implements IGame
 	int swipes = 0;
 	int showDescs = 0;
 
-	public LocalGame(ArrayList<String> words,
-					 ArrayList<String> descs,
+	public LocalGame(List<String> words,
+					 List<String> descs,
 	                 IPointsCalculator pc)
 	{
 		this.words = words;
 		this.descs = descs;
 		this.pointsCalculator = pc;
-        this.tips = 30;
+        this.tips = 3;
 		this.swipes = 3;
 		this.showDescs = 3;
+		this.wordsFound = new ArrayList<String>();
+		this.pointsByWord = new ArrayList<Integer>();
 	}
 	
 	@Override
@@ -42,8 +48,13 @@ public class LocalGame implements IGame
 	@Override
 	public void addWordPoints(int tips)
 	{
-		this.points += this.pointsCalculator
-		                   .GetTotal(this.currentWord, tips);
+		int points = this.pointsCalculator
+		                 .GetTotal(this.currentWord, tips);
+						   
+		
+		this.points += points;
+		this.wordsFound.add(this.currentWord);
+		this.pointsByWord.add(points);
 	}
 
 	@Override
@@ -79,6 +90,13 @@ public class LocalGame implements IGame
 		savedInstance.putInt(GameConstants.GAME_TIPS, this.tips);
 		savedInstance.putInt(GameConstants.GAME_SWIPES, this.swipes);
 		savedInstance.putInt(GameConstants.GAME_DESCS, this.showDescs);
+		savedInstance.putStringArray(GameConstants.GAME_WORDSFOUND, this.wordsFound.toArray(new String[this.wordsFound.size()]));
+		
+		int[] x = new int[this.pointsByWord.size()];
+		int i = 0;
+		for(Integer n : this.pointsByWord)
+			x[i++] = n;
+		savedInstance.putIntArray(GameConstants.GAME_POINTSBYWORD, x);
     }
 
     @Override
@@ -160,6 +178,18 @@ public class LocalGame implements IGame
 	public int getTotalDescriptions()
 	{
 		return this.showDescs;
+	}
+	
+	@Override
+	public void setWordsFound(String[] words)
+	{
+		this.wordsFound = Arrays.asList(words);
+	}
+
+	@Override
+	public void setPointsByWord(Integer[] points)
+	{
+		this.pointsByWord = Arrays.asList(points);
 	}
 	
 }

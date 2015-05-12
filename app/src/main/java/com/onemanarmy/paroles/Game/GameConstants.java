@@ -14,4 +14,6 @@ public class GameConstants
 	public final static String GAME_DESCS = "GAME_DESCRIPTIONS";
 	public final static String GAME_CURRENTDESC = "GAME_CURRENTDESCS";
 	public final static String GAME_TIPSINCURRENTWORD = "GAME_CURRENTTIPS";
+	public final static String GAME_WORDSFOUND = "GAME_WORDSFOUND";
+	public final static String GAME_POINTSBYWORD = "GAME_POINTSBYWORD";
 }

@@ -9,6 +9,7 @@ import android.widget.*;
 import com.onemanarmy.paroles.Bootstrap.*;
 import com.onemanarmy.paroles.Game.*;
 import java.util.*;
+import android.widget.FrameLayout.*;
 
 public class MainActivity extends Activity 
 {
@@ -26,6 +27,9 @@ public class MainActivity extends Activity
 	private Button btnTips = null;
 	private Button btnSwipes = null;
 	private Button btnDescs = null;
+	private DisplayMetrics metrics = null;
+	private int sizeForButtons = 0;
+	private int sizeForFonts = 0;
 
     // Supporting game logic
 	private String currentWord = "";
@@ -66,14 +70,16 @@ public class MainActivity extends Activity
         DIContainer.BuildUp(this);
 
         // Setup the screen
+		metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		sizeForButtons = (int) ((metrics.widthPixels / metrics.density) / 5 * 0.9) ;
+		sizeForFonts = (int) (metrics.widthPixels / metrics.density) / 20;
+		
 		PrepareListeners();
 		PrepareScreenElements();
 
         // Finally, start the game
 		StartGame();
-		
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		ShowMessage(Float.toString(metrics.widthPixels / metrics.density) + " x " + 
 					Float.toString(metrics.heightPixels / metrics.density));
@@ -284,17 +290,25 @@ public class MainActivity extends Activity
 		SetLetter(R.id.board_solution_letter10);
 		
 		txtScore = (TextView) this.findViewById(R.id.board_score);
+		//txtScore.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+		
         txtTime = (TextView) this.findViewById(R.id.board_time);
+		//txtTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+		
 		txtDesc = (TextView) this.findViewById(R.id.board_description);
+		//txtDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 		
 		btnTips = (Button) this.findViewById(R.id.board_tip);
 		btnTips.setOnClickListener(tipClick);
+		RedimButton(btnTips, false);
 		
 		btnSwipes = (Button) this.findViewById(R.id.board_swipe);
 		btnSwipes.setOnClickListener(swipeClick);
+		RedimButton(btnSwipes, false);
 		
 		btnDescs = (Button) this.findViewById(R.id.board_descs);
 		btnDescs.setOnClickListener(descsClick);
+		RedimButton(btnDescs,false);
 		
 	}
 	
@@ -302,6 +316,9 @@ public class MainActivity extends Activity
 	{
 		Button b = (Button) this.findViewById(id);
 		b.setOnClickListener(buttonClick);
+		
+		RedimButton(b, true);
+		
 		buttons.add(b);
 	}
 	
@@ -309,6 +326,9 @@ public class MainActivity extends Activity
 	{
 		Button b = (Button) this.findViewById(id);
 		b.setOnClickListener(letterClick);
+		
+		RedimButton(b,true);
+		
 		letters.add(b);
 	}
 
@@ -322,6 +342,19 @@ public class MainActivity extends Activity
 
         return state;
     }
+	
+	private void RedimButton(Button b, boolean changeWidth)
+	{
+		android.view.ViewGroup.LayoutParams p = b.getLayoutParams();
+		
+		if (changeWidth)
+			p.width = sizeForButtons;
+			
+		p.height = sizeForButtons;
+		b.setLayoutParams(p);
+		
+		b.setTextSize(sizeForFonts);
+	}
 	
 	//------------------------------
 	//
@@ -338,7 +371,6 @@ public class MainActivity extends Activity
         {
             this.game = this.gameFactory.getNewGame(savedInstance);
             startTime = savedInstance.getLong(GameConstants.GAME_STARTTIME);
-			
         }
 
         // Put the current game elements on screen...

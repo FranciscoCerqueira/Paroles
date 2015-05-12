@@ -17,7 +17,7 @@ public class LocalGameFactory implements IGameFactory
 	public IGame getNewGame()
 	{
 		ArrayList<String> colors = new ArrayList<String>();
-		colors.add("WHITE");
+		colors.add("WHITESMOKE");
 		colors.add("BLACK");
 		colors.add("BROWN");
 		colors.add("PURPLE");
