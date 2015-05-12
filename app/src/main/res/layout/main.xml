@@ -38,7 +38,8 @@
 	   			 android:layout_height="fill_parent"
 				 android:orientation="horizontal"
 	   			 android:gravity="center"
-	   			 android:layout_weight="1">
+	   			 android:layout_weight="1"
+				 android:layout_margin="1dp">
 				 
 	   <Button android:id="@+id/board_solution_letter1"
 			style="@style/BoardLetters"
@@ -86,7 +87,8 @@
 		android:layout_height="fill_parent"
 		android:orientation="horizontal"
 	   	android:gravity="center"
-	   	android:layout_weight="1">
+	   	android:layout_weight="1"
+	    android:layout_margin="1dp">
 
 		<Button android:id="@+id/board_button1"
 			style="@style/BoardButtons"

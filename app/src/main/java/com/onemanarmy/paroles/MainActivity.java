@@ -72,7 +72,7 @@ public class MainActivity extends Activity
         // Setup the screen
 		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		sizeForButtons = (int) ((metrics.widthPixels / metrics.density) / 5 * 0.9) ;
+		sizeForButtons = (int) metrics.widthPixels / 10 ;
 		sizeForFonts = (int) (metrics.widthPixels / metrics.density) / 20;
 		
 		PrepareListeners();
