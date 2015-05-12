@@ -11,7 +11,7 @@
 		android:layout_weight="1">
 		
 		<TextView android:id="@+id/board_score"
-			style="@style/BoardExtras"
+			style="@style/BoardInfos"
 			android:text="0"
             android:gravity="center"/>
 
@@ -28,10 +28,25 @@
             android:text="! x3" />
 
         <TextView android:id="@+id/board_time"
-            style="@style/BoardExtras"
+            style="@style/BoardInfos"
             android:text="02:00"
             android:gravity="center"/>
 		
+	</LinearLayout>
+	
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal"
+		android:layout_gravity="center"
+		android:gravity="center_horizontal|bottom"
+		android:layout_weight="1">
+
+		<TextView android:id="@+id/board_description"
+            style="@style/BoardInfos"
+			android:layout_width="wrap_content"
+            android:text="abc"
+			android:singleLine="true"/>
+
 	</LinearLayout>
 
    <LinearLayout android:layout_width="fill_parent"
@@ -130,21 +145,6 @@
 			style="@style/BoardButtons"
 			android:text="" />
 
-	</LinearLayout>
-	
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:orientation="horizontal"
-		android:layout_gravity="center"
-		android:gravity="center_horizontal|bottom"
-		android:layout_weight="1">
-		
-		<TextView android:id="@+id/board_description"
-            style="@style/BoardLetters"
-			android:layout_width="wrap_content"
-            android:text="abc"
-			android:singleLine="true"/>
-		
 	</LinearLayout>
 
 </LinearLayout>
