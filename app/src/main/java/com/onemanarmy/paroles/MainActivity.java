@@ -73,7 +73,7 @@ public class MainActivity extends Activity
 		metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		sizeForButtons = (int) (metrics.widthPixels / 10 * 0.95);
-		sizeForFonts = (int) (metrics.widthPixels / 25 * 0.9);
+		sizeForFonts = (int) (sizeForButtons * 0.20);
 		
 		PrepareListeners();
 		PrepareScreenElements();
@@ -81,8 +81,8 @@ public class MainActivity extends Activity
         // Finally, start the game
 		StartGame();
 		
-		ShowMessage(Float.toString(metrics.widthPixels / metrics.density) + " x " + 
-					Float.toString(metrics.heightPixels / metrics.density));
+		ShowMessage(Integer.toString(sizeForButtons) + " - " + 
+					Integer.toString(sizeForFonts));
     }
 
     @Override
@@ -290,13 +290,13 @@ public class MainActivity extends Activity
 		SetLetter(R.id.board_solution_letter10);
 		
 		txtScore = (TextView) this.findViewById(R.id.board_score);
-		txtScore.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeForFonts);
+		txtScore.setTextSize(sizeForFonts);
 		
         txtTime = (TextView) this.findViewById(R.id.board_time);
-		txtTime.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeForFonts);
+		txtTime.setTextSize(sizeForFonts);
 		
 		txtDesc = (TextView) this.findViewById(R.id.board_description);
-		txtDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeForFonts);
+		txtDesc.setTextSize(sizeForFonts);
 		
 		btnTips = (Button) this.findViewById(R.id.board_tip);
 		btnTips.setOnClickListener(tipClick);
@@ -353,7 +353,7 @@ public class MainActivity extends Activity
 		p.height = sizeForButtons;
 		b.setLayoutParams(p);
 		
-		b.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeForFonts);
+		b.setTextSize(sizeForFonts);
 	}
 	
 	//------------------------------
