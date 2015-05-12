@@ -5,7 +5,7 @@
 	<style name="BoardExtras">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">10dp</item>
-		<item name="android:padding">1dp</item>
+		<item name="android:layout_margin">1dp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 	<style name="BoardInfos">
