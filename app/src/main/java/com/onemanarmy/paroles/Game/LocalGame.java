@@ -155,17 +155,18 @@ public class LocalGame implements IGame
 	public String getDescription()
 	{
 		int currentDesc = counter - 1;
-		
-		if (this.showDescs > 0 &&
-			this.descs.size() > currentDesc)
-        {
-            this.showDescs--;
-            return this.descs.get(currentDesc);
-        }
-        else
-        {
-            return "";
-        }
+//		
+//		if (this.showDescs > 0 &&
+//			this.descs.size() > currentDesc)
+//        {
+//            this.showDescs--;
+//            return this.descs.get(currentDesc);
+//        }
+//        else
+//        {
+//            return "";
+//        }
+		return this.descs.get(currentDesc);
 	}
 	
 	@Override

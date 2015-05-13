@@ -13,6 +13,8 @@ import android.widget.FrameLayout.*;
 
 public class MainActivity extends Activity 
 {
+	private final int DURATION = 120;
+	
 	// UI Elements
 	private ArrayList<Button> buttons= new ArrayList<Button>();
 	private ArrayList<Button> letters= new ArrayList<Button>();
@@ -138,6 +140,10 @@ public class MainActivity extends Activity
 						ResetSolution(false);
 						ShowTips();
 					}
+					else
+					{
+						AskATip();
+					}
 				}
 				                  
 				break;   
@@ -209,36 +215,7 @@ public class MainActivity extends Activity
             @Override
             public void onClick(View v)
             {
-                if (game.getTip())
-                {
-					
-					int pos = -1;
-					
-					while(pos == -1)
-					{
-						pos = rand.nextInt(currentWord.length());
-						if (!tippedWord.substring(pos, pos + 1).equalsIgnoreCase("?"))
-							pos = -1;
-						else
-						{
-							String tempWord = "";
-							for(int i=0; i < currentWord.length(); i++)
-							{
-								
-								if (i == pos)
-									tempWord += "x";
-								else
-									tempWord += tippedWord.substring(i, i+1);
-							}
-							tippedWord = tempWord;
-						}
-					}
-					
-					tipsInCurrentWord++;
-					ResetSolution(false);
-					ShowTips();
-					CheckAnswer();
-                }
+                AskATip();
             }
         };
 		
@@ -259,7 +236,7 @@ public class MainActivity extends Activity
 				if (txtDesc.getText().length() == 0)
 				{
                 	ShowDescription(game.getDescription());
-					ShowTotalDescriptions();
+					//ShowTotalDescriptions();
 				}
             }
         };
@@ -307,8 +284,9 @@ public class MainActivity extends Activity
 		RedimButton(btnSwipes, false);
 		
 		btnDescs = (Button) this.findViewById(R.id.board_descs);
-		btnDescs.setOnClickListener(descsClick);
-		RedimButton(btnDescs,false);
+		btnDescs.setVisibility(View.GONE);
+		//btnDescs.setOnClickListener(descsClick);
+		//RedimButton(btnDescs,false);
 		
 	}
 	
@@ -415,7 +393,7 @@ public class MainActivity extends Activity
 		ResetSolution(checkSavedInstance);
 		ShowTips();
 		ShowSwipes();
-		ShowTotalDescriptions();
+		ShowDescription(game.getDescription());
 	}
 	
 	private void SetUIWithWord()
@@ -526,9 +504,55 @@ public class MainActivity extends Activity
 
     public void ShowTime()
     {
-        long seconds = 120 - ((System.currentTimeMillis() - startTime) / 1000);
+        long seconds = DURATION - ((System.currentTimeMillis() - startTime) / 1000);
         txtTime.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+		
+		if (seconds <= 0)
+		{
+			FinishGame();
+		}
+		else if (seconds == 5)
+		{
+			TimeEnding(seconds);
+		}
     }
+	
+	public void AskATip()
+	{
+		if (game.getTip())
+		{
+			int pos = -1;
+
+			while(pos == -1)
+			{
+				pos = rand.nextInt(currentWord.length());
+				if (!tippedWord.substring(pos, pos + 1).equalsIgnoreCase("?"))
+					pos = -1;
+				else
+				{
+					String tempWord = "";
+					for(int i=0; i < currentWord.length(); i++)
+					{
+
+						if (i == pos)
+							tempWord += "x";
+						else
+							tempWord += tippedWord.substring(i, i+1);
+					}
+					tippedWord = tempWord;
+				}
+			}
+
+			tipsInCurrentWord++;
+			ResetSolution(false);
+			ShowTips();
+			CheckAnswer();
+		}
+		else
+		{
+			ShowMessage(this.getString(R.string.no_tips));
+		}
+	}
 	
 	public void ShowTips()
 	{
@@ -594,12 +618,33 @@ public class MainActivity extends Activity
 		txtDesc.setText(desc);
 	}
 	
-	public void ShowTotalDescriptions()
-	{
-		int descs = this.game.getTotalDescriptions();
+	//public void ShowTotalDescriptions()
+	//{
+	//	int descs = this.game.getTotalDescriptions();
 
-		btnDescs.setText("! x" + descs);
-		btnDescs.setEnabled(descs > 0);
+	//	btnDescs.setText("! x" + descs);
+	//	btnDescs.setEnabled(descs > 0);
+	//}
+	
+	//------------------------------
+	//
+	// End Game
+	//
+	//------------------------------
+	
+	public void TimeEnding(long seconds)
+	{
+		if (seconds == 5)
+		{
+			ShowMessage("I'll play a song now");
+		}
+	}
+	
+	public void FinishGame()
+	{
+		// Stop timer...
+		
+		// Send the object to next screen...
 	}
 
 	//------------------------------

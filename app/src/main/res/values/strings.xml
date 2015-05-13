@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Paroles</string>
-    <string name="no_swipes">You don\'t have more swipes available.</string>
-
+    <string name="no_swipes">You don\'t have swipes available.</string>
+	<string name="no_tips">You don\'t have tips available.</string>
+	
 </resources>
