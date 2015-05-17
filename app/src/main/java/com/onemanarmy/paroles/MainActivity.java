@@ -13,7 +13,7 @@ import android.widget.FrameLayout.*;
 
 public class MainActivity extends Activity 
 {
-	private final int DURATION = 120;
+	private final int DURATION = 20;
 	
 	// UI Elements
 	private ArrayList<Button> buttons= new ArrayList<Button>();
@@ -643,6 +643,8 @@ public class MainActivity extends Activity
 	public void FinishGame()
 	{
 		// Stop timer...
+		started = false;
+        timer.removeCallbacks(timerRun);
 		
 		// Send the object to next screen...
 	}
