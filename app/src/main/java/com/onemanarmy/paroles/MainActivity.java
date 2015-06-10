@@ -10,11 +10,12 @@ import com.onemanarmy.paroles.Bootstrap.*;
 import com.onemanarmy.paroles.Game.*;
 import java.util.*;
 import android.widget.FrameLayout.*;
+import android.content.*;
 
 public class MainActivity extends Activity 
 {
-	private final int DURATION = 20;
-	
+	private final int DURATION = 30;
+
 	// UI Elements
 	private ArrayList<Button> buttons= new ArrayList<Button>();
 	private ArrayList<Button> letters= new ArrayList<Button>();
@@ -41,23 +42,25 @@ public class MainActivity extends Activity
 	private Random rand = null;
 	private int tipsInCurrentWord = 0;
 
-    // Timer
-    private Handler timer = null;
+    // timer
+	private Timer timer = null;
+	private TimerTask timerTask = null;
+    private Handler timerHandler = null;
     private Runnable timerRun = null;
     private boolean started = false;
     private long startTime = 0;
-	
+
 	// Swipe
 	private float x1;
 	private float y1;
     private static final int MIN_DISTANCE = 150;
-	
+
 	// For properties use
 	private IGameFactory gameFactory = null;
 
     // Activity Lifecycle
     private Bundle savedInstance = null;
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -67,7 +70,7 @@ public class MainActivity extends Activity
         // It might be used by other methods...
         this.savedInstance = savedInstanceState;
 		this.rand = new Random();
-
+		
         // Fill dependencies
         DIContainer.BuildUp(this);
 
@@ -76,15 +79,13 @@ public class MainActivity extends Activity
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		sizeForButtons = (int) (metrics.widthPixels / 10 * 0.95);
 		sizeForFonts = (int) (sizeForButtons * 0.20);
-		
+
 		PrepareListeners();
 		PrepareScreenElements();
 
         // Finally, start the game
 		StartGame();
 		
-		ShowMessage(Integer.toString(sizeForButtons) + " - " + 
-					Integer.toString(sizeForFonts));
     }
 
     @Override
@@ -105,14 +106,23 @@ public class MainActivity extends Activity
     protected void onPause()
     {
         super.onPause();
-        started = false;
-        timer.removeCallbacks(timerRun);
+        
+		StopTimer();
+        
     }
-	
+
+	@Override
+	protected void onResume()
+	{
+		// TODO: Implement this method
+		super.onResume();
+		StartTimer();
+	}
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{     
-		switch(event.getAction())
+		switch (event.getAction())
 		{
 			case MotionEvent.ACTION_DOWN:
 				x1 = event.getX();
@@ -145,11 +155,11 @@ public class MainActivity extends Activity
 						AskATip();
 					}
 				}
-				                  
+
 				break;   
-				
+
 		}
-		
+
 		return super.onTouchEvent(event);       
 	}
 
@@ -158,18 +168,18 @@ public class MainActivity extends Activity
 	// Properties
 	//
 	//------------------------------
-	
+
 	public void setGameFactory(IGameFactory gameFactory)
 	{
 		this.gameFactory = gameFactory;
 	}
-	
+
 	//------------------------------
 	//
 	// UI plumbing
 	//
 	//------------------------------
-	
+
 	private void PrepareListeners()
     {
         buttonClick = new View.OnClickListener()
@@ -198,18 +208,6 @@ public class MainActivity extends Activity
             }
         };
 
-        timerRun = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if (started)
-                    ShowTime();
-
-                timer.postDelayed(timerRun, 1000L);
-            }
-        };
-
         tipClick = new View.OnClickListener()
         {
             @Override
@@ -218,7 +216,7 @@ public class MainActivity extends Activity
                 AskATip();
             }
         };
-		
+
 		swipeClick = new View.OnClickListener()
         {
 			@Override
@@ -227,7 +225,7 @@ public class MainActivity extends Activity
 				swipeToNextWord();
 			}
 		};
-		
+
 		descsClick = new View.OnClickListener()
         {
             @Override
@@ -236,12 +234,11 @@ public class MainActivity extends Activity
 				if (txtDesc.getText().length() == 0)
 				{
                 	ShowDescription(game.getDescription());
-					//ShowTotalDescriptions();
 				}
             }
         };
     }
-	
+
 	private void PrepareScreenElements()
 	{
 		SetButton(R.id.board_button1);
@@ -254,7 +251,7 @@ public class MainActivity extends Activity
 		SetButton(R.id.board_button8);
 		SetButton(R.id.board_button9);
 		SetButton(R.id.board_button10);
-		
+
 		SetLetter(R.id.board_solution_letter1);
 		SetLetter(R.id.board_solution_letter2);
 		SetLetter(R.id.board_solution_letter3);
@@ -265,48 +262,46 @@ public class MainActivity extends Activity
 		SetLetter(R.id.board_solution_letter8);
 		SetLetter(R.id.board_solution_letter9);
 		SetLetter(R.id.board_solution_letter10);
-		
+
 		txtScore = (TextView) this.findViewById(R.id.board_score);
 		txtScore.setTextSize(sizeForFonts);
-		
+
         txtTime = (TextView) this.findViewById(R.id.board_time);
 		txtTime.setTextSize(sizeForFonts);
-		
+
 		txtDesc = (TextView) this.findViewById(R.id.board_description);
 		txtDesc.setTextSize(sizeForFonts);
-		
+
 		btnTips = (Button) this.findViewById(R.id.board_tip);
 		btnTips.setOnClickListener(tipClick);
 		RedimButton(btnTips, false);
-		
+
 		btnSwipes = (Button) this.findViewById(R.id.board_swipe);
 		btnSwipes.setOnClickListener(swipeClick);
 		RedimButton(btnSwipes, false);
-		
+
 		btnDescs = (Button) this.findViewById(R.id.board_descs);
 		btnDescs.setVisibility(View.GONE);
-		//btnDescs.setOnClickListener(descsClick);
-		//RedimButton(btnDescs,false);
-		
+
 	}
-	
+
 	private void SetButton(int id)
 	{
 		Button b = (Button) this.findViewById(id);
 		b.setOnClickListener(buttonClick);
-		
+
 		RedimButton(b, true);
-		
+
 		buttons.add(b);
 	}
-	
+
 	private void SetLetter(int id)
 	{
 		Button b = (Button) this.findViewById(id);
 		b.setOnClickListener(letterClick);
-		
-		RedimButton(b,true);
-		
+
+		RedimButton(b, true);
+
 		letters.add(b);
 	}
 
@@ -315,31 +310,31 @@ public class MainActivity extends Activity
         boolean[] state = new boolean[10];
         int counter = 0;
 
-        for(Button b : buttons)
+        for (Button b : buttons)
             state[counter++] = b.isEnabled();
 
         return state;
     }
-	
+
 	private void RedimButton(Button b, boolean changeWidth)
 	{
 		android.view.ViewGroup.LayoutParams p = b.getLayoutParams();
-		
+
 		if (changeWidth)
 			p.width = sizeForButtons;
-			
+
 		p.height = sizeForButtons;
 		b.setLayoutParams(p);
-		
+
 		b.setTextSize(sizeForFonts);
 	}
-	
+
 	//------------------------------
 	//
 	//  Adjusting the game....
 	//
 	//------------------------------
-	
+
 	private void StartGame()
 	{
         // Check if the activity was recreated...
@@ -355,20 +350,17 @@ public class MainActivity extends Activity
         ShowPoints();
         SetUIForNextWord(true);
 
-        // Now the user will be able to start, so I'll start the timer
+        // Now the user will be able to start, so I'll start the timerHandler
         // here when its the first passage to this block
         if (startTime == 0)
             startTime = System.currentTimeMillis();
 
-        // Putting the timer to work...
-        timer = new Handler();
-        timer.postDelayed(timerRun, 1000L);
-
         ShowTime();
         started = true;
+		
 
 	}
-	
+
 	private void SetUIForNextWord(boolean checkSavedInstance)
 	{
 		this.currentWord = this.game.nextWord();
@@ -395,10 +387,10 @@ public class MainActivity extends Activity
 		ShowSwipes();
 		ShowDescription(game.getDescription());
 	}
-	
+
 	private void SetUIWithWord()
 	{
-		for(int i=0; i<buttons.size(); i++)
+		for (int i=0; i < buttons.size(); i++)
 		{
 			Button b = buttons.get(i);
 			Button l = letters.get(i);
@@ -418,7 +410,7 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-	
+
 	private void ResetSolution(boolean checkSavedInstance)
 	{
         if (checkSavedInstance &&
@@ -444,13 +436,13 @@ public class MainActivity extends Activity
         }
 
 	}
-	
+
 	private void CheckAnswer()
 	{
 		if (this.GetWordInConstruction().length() == 
 		    this.currentWord.length())
 		{
-			
+
 			if (this.GetWordInConstruction().equals(this.currentWord))
 			{
 				CalculatePoints();
@@ -463,34 +455,34 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-	
+
 	public void ScrambleWord()
 	{
 		List<Character> l = new ArrayList<>();
-		for(char c :  currentWord.toCharArray()) 
+		for (char c :  currentWord.toCharArray()) 
 			l.add(c); 
-			
+
 		Collections.shuffle(l); 
 
 		StringBuilder sb = new StringBuilder(); //now rebuild the word
-		for(char c : l)
+		for (char c : l)
 			sb.append(c);
 
 		shuffledWord = sb.toString();
-		
+
 		// Avoid situations where the word appears
 		// on ui exactly as it is
 		if (shuffledWord.equals(currentWord))
 			ScrambleWord();
 	}
-	
+
 	public void PrepareForTips()
 	{
 		this.tippedWord = "";
-		for(char c : currentWord.toCharArray()) 
+		for (char c : currentWord.toCharArray()) 
 			this.tippedWord = this.tippedWord.concat("?");
 	}
-	
+
 	public void CalculatePoints()
 	{
 		this.game.addWordPoints(this.tipsInCurrentWord);
@@ -506,7 +498,7 @@ public class MainActivity extends Activity
     {
         long seconds = DURATION - ((System.currentTimeMillis() - startTime) / 1000);
         txtTime.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
-		
+
 		if (seconds <= 0)
 		{
 			FinishGame();
@@ -516,14 +508,14 @@ public class MainActivity extends Activity
 			TimeEnding(seconds);
 		}
     }
-	
+
 	public void AskATip()
 	{
 		if (game.getTip())
 		{
 			int pos = -1;
 
-			while(pos == -1)
+			while (pos == -1)
 			{
 				pos = rand.nextInt(currentWord.length());
 				if (!tippedWord.substring(pos, pos + 1).equalsIgnoreCase("?"))
@@ -531,13 +523,13 @@ public class MainActivity extends Activity
 				else
 				{
 					String tempWord = "";
-					for(int i=0; i < currentWord.length(); i++)
+					for (int i=0; i < currentWord.length(); i++)
 					{
 
 						if (i == pos)
 							tempWord += "x";
 						else
-							tempWord += tippedWord.substring(i, i+1);
+							tempWord += tippedWord.substring(i, i + 1);
 					}
 					tippedWord = tempWord;
 				}
@@ -553,22 +545,22 @@ public class MainActivity extends Activity
 			ShowMessage(this.getString(R.string.no_tips));
 		}
 	}
-	
+
 	public void ShowTips()
 	{
 		int tips = this.game.getTotalTips();
-		
+
 		btnTips.setText("? x" + tips);
 		btnTips.setEnabled(tips > 0);
-		
-		for(int i=0;i < this.currentWord.length(); i++)
+
+		for (int i=0;i < this.currentWord.length(); i++)
 		{
-			if(this.tippedWord.substring(i,i+1).equals("x"))
+			if (this.tippedWord.substring(i, i + 1).equals("x"))
 			{
-				String letter = this.currentWord.substring(i,i+1);
+				String letter = this.currentWord.substring(i, i + 1);
 				letters.get(i).setText(letter);
-				
-				for(Button b : buttons)
+
+				for (Button b : buttons)
 				{
 					if (b.getText().toString().equalsIgnoreCase(letter) &&
 						b.isEnabled())
@@ -580,7 +572,7 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-	
+
 	public void ShowSwipes()
 	{
 		int swipes = this.game.getTotalSwipes();
@@ -588,12 +580,12 @@ public class MainActivity extends Activity
 		btnSwipes.setText("-> x" + swipes);
 		btnSwipes.setEnabled(swipes > 0);
 	}
-	
+
 	public String GetWordInConstruction()
 	{
 		String word = "";
-		
-		for(Button b : letters)
+
+		for (Button b : letters)
 		{
 			String letter = b.getText().toString();
 			if (b.getVisibility() == View.VISIBLE && !letter.equalsIgnoreCase("?"))
@@ -601,10 +593,10 @@ public class MainActivity extends Activity
 			else
 				break;
 		}
-			
+
 		return word;
 	}
-	
+
 	private void swipeToNextWord()
 	{
 		if (this.game.getSwipe())
@@ -612,12 +604,12 @@ public class MainActivity extends Activity
 		else
 			ShowMessage(this.getString(R.string.no_swipes));
 	}
-	
+
 	private void ShowDescription(String desc)
 	{
 		txtDesc.setText(desc);
 	}
-	
+
 	//public void ShowTotalDescriptions()
 	//{
 	//	int descs = this.game.getTotalDescriptions();
@@ -625,13 +617,13 @@ public class MainActivity extends Activity
 	//	btnDescs.setText("! x" + descs);
 	//	btnDescs.setEnabled(descs > 0);
 	//}
-	
+
 	//------------------------------
 	//
 	// End Game
 	//
 	//------------------------------
-	
+
 	public void TimeEnding(long seconds)
 	{
 		if (seconds == 5)
@@ -639,14 +631,60 @@ public class MainActivity extends Activity
 			ShowMessage("I'll play a song now");
 		}
 	}
-	
+
 	public void FinishGame()
 	{
-		// Stop timer...
+		// Stop timerHandler...
 		started = false;
-        timer.removeCallbacks(timerRun);
-		
+        StopTimer();
+
 		// Send the object to next screen...
+		Intent i = new Intent(MainActivity.this, EndGameActivity.class);
+		i.putExtra(EndGameActivity.END_GAME_WORDS, this.game.getWordsFound());
+		i.putExtra(EndGameActivity.END_GAME_POINTS, this.game.getPointsByWord());
+		startActivity(i);
+	}
+	
+	public void StartTimer()
+	{
+		this.timer = new Timer();
+		InitializeTimerTask();
+		timer.schedule(timerTask,0,1000L);
+	}
+	
+	
+	public void InitializeTimerTask()
+	{
+		// Putting the timerHandler to work...
+		this.timerHandler = new Handler();
+		this.timerRun = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (started)
+				{
+                    ShowTime();
+				}
+            }
+        };
+		
+		this.timerTask = new TimerTask()
+		{
+			public void run()
+			{
+				timerHandler.post(timerRun);
+			}
+		};
+	}
+	
+	private void StopTimer()
+	{
+		if (timer != null)
+		{
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 	//------------------------------
@@ -654,7 +692,7 @@ public class MainActivity extends Activity
 	//  Helping to debug
 	//
 	//------------------------------
-	
+
 	public void ShowMessage(String msg)
 	{
 		Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();

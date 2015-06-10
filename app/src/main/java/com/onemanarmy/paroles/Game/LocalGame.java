@@ -5,6 +5,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.*;
 
+
 public class LocalGame implements IGame
 {
 
@@ -90,13 +91,8 @@ public class LocalGame implements IGame
 		savedInstance.putInt(GameConstants.GAME_TIPS, this.tips);
 		savedInstance.putInt(GameConstants.GAME_SWIPES, this.swipes);
 		savedInstance.putInt(GameConstants.GAME_DESCS, this.showDescs);
-		savedInstance.putStringArray(GameConstants.GAME_WORDSFOUND, this.wordsFound.toArray(new String[this.wordsFound.size()]));
-		
-		int[] x = new int[this.pointsByWord.size()];
-		int i = 0;
-		for(Integer n : this.pointsByWord)
-			x[i++] = n;
-		savedInstance.putIntArray(GameConstants.GAME_POINTSBYWORD, x);
+		savedInstance.putStringArray(GameConstants.GAME_WORDSFOUND, this.getWordsFound());
+		savedInstance.putIntArray(GameConstants.GAME_POINTSBYWORD, this.getPointsByWord());
     }
 
     @Override
@@ -193,4 +189,21 @@ public class LocalGame implements IGame
 		this.pointsByWord = Arrays.asList(points);
 	}
 	
+
+	@Override
+	public String[] getWordsFound()
+	{
+		return this.wordsFound.toArray(new String[this.wordsFound.size()]);
+	}
+
+	@Override
+	public int[] getPointsByWord()
+	{
+		int[] x = new int[this.pointsByWord.size()];
+		int i = 0;
+		for(Integer n : this.pointsByWord)
+			x[i++] = n;
+			
+		return x;
+	}
 }
